@@ -7,18 +7,21 @@ import time # Allows our program to sleep so things slow down a little
 env = gym.make("MountainCar-v0")
 action_space_size = env.action_space.n
 
-# [ position, velocity ]
-print(env.observation_space.high)
-print(env.observation_space.low)
+# Because there are two values observable in the environment and we want to dissect the ranges into 20 hunks
+discrete_os_size = [14] * 2
+discrete_os_win_size = (env.observation_space.high - env.observation_space.low) / discrete_os_size
 
-exit(0)
-
-q_table = np.zeros((env.observation_space.n, action_space_size))
+# Shape
+q_table = np.zeros((discrete_os_size[0], discrete_os_size[1], action_space_size))
 
 # Max Number of turns in a game before terminating the episode
 max_steps_per_episode = 50
 
 # Functions
+def get_discrete_state(state):
+    discrete_state = (state - env.observation_space.low)/discrete_os_win_size
+    return tuple(discrete_state.astype(np.int))
+
 def watch_x_episodes(x):
     for episode in range(x):
         # initialize new episode params
