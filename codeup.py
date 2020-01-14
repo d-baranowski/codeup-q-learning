@@ -25,6 +25,44 @@ print(q_table)
 # Max Number of turns in a game before terminating the episode
 max_steps_per_episode = 50
 
+# Functions
+def watch_x_episodes(x):
+    for episode in range(x):
+        # initialize new episode params
+        state = env.reset()
+        done = False
+        print("*****EPISODE ", episode + 1, "*****\n")
+        time.sleep(1)
+
+        for step in range(max_steps_per_episode):
+            # Show current state of environment on screen
+            env.render()
+            time.sleep(0.3)
+
+            # Choose action with highest Q-value for current state
+            action = np.argmax(q_table[state])
+
+            # Take new action
+            new_state, reward, done, info = env.step(action)
+
+            # Agent stepped in a hole and lost episode
+            if done:
+                if reward == 1:
+                    # Agent reached the goal and won episode
+                    print("****You reached the goal!****")
+                    time.sleep(3)
+                else:
+                    print("****You fell through a hole!****")
+                    time.sleep(3)
+                break
+
+            # Set new state
+            state = new_state
+
+    env.close()
+
+watch_x_episodes(1)
+
 # Number of games to play
 num_episodes = 6000
 
@@ -95,6 +133,8 @@ for episode in range(num_episodes):
             -exploration_decay_rate * episode)
 
     rewards_all_episodes.append(rewards_current_episode)
+
+watch_x_episodes(3)
 
 # Print updated  q table
 print("\n\n***** Q-table *******\n")
