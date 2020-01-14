@@ -7,11 +7,13 @@ import time # Allows our program to sleep so things slow down a little
 env = gym.make("MountainCar-v0")
 action_space_size = env.action_space.n
 
-# Get the number of tiles
-observation_space_size = env.observation_space.n
+# [ position, velocity ]
+print(env.observation_space.high)
+print(env.observation_space.low)
 
-# Initialise our Q Table
-q_table = np.zeros((observation_space_size, action_space_size))
+exit(0)
+
+q_table = np.zeros((env.observation_space.n, action_space_size))
 
 # Max Number of turns in a game before terminating the episode
 max_steps_per_episode = 50
